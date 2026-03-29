@@ -189,3 +189,60 @@ th { background: #f4f8fc; }
   .hero { padding: 32px 20px; }
   .hero h1 { font-size: 1.8rem; }
 }
+
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.hero-compact {
+  padding: 32px 28px;
+}
+.page-grid {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  margin-top: 24px;
+}
+.sticky-card {
+  position: sticky;
+  top: 94px;
+}
+.card-form-lg {
+  padding: 24px;
+}
+.section-title-small {
+  margin-top: 0;
+}
+.form-row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.steps-list {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.btn-secondary-dark {
+  color: var(--dark-text);
+  border-color: var(--border);
+}
+.top-gap-sm {
+  margin-top: 12px;
+}
+@media (max-width: 920px) {
+  .page-grid {
+    grid-template-columns: 1fr;
+  }
+  .sticky-card {
+    position: static;
+  }
+}
+@media (max-width: 680px) {
+  .form-row-2 {
+    grid-template-columns: 1fr;
+  }
+}
