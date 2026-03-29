@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resultado do pagamento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="single-panel">
+    <section class="card result-card">
+      <h1>Resultado do pagamento</h1>
+      <p id="statusText"></p>
+      <a href="index.html" class="btn btn-primary">Voltar ao site</a>
+    </section>
+  </main>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    const map = {
+      success: 'Pagamento concluído. O pedido retornará como pago após confirmação do gateway/webhook.',
+      pending: 'Pagamento pendente. Aguarde a compensação e acompanhe pelo painel administrativo.',
+      failure: 'Pagamento não concluído. O usuário poderá tentar novamente pelo link seguro.'
+    };
+    document.getElementById('statusText').textContent = map[status] || 'Status não informado.';
+  </script>
+</body>
+</html>

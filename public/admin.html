@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JurisConnect | Painel do administrador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <div class="brand">JurisConnect Admin</div>
+      <div class="brand-subtitle">Gestão de pedidos, preços e fluxo financeiro</div>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="btn btn-outline">Voltar ao site</a>
+    </div>
+  </header>
+
+  <main class="admin-layout">
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Visão geral</h2>
+          <p>Indicadores consolidados da operação.</p>
+        </div>
+      </div>
+      <div id="metricsGrid" class="summary-grid four-cols"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Solicitações</h2>
+          <p>Atualize status, pagamento e anotações administrativas.</p>
+        </div>
+      </div>
+      <div id="ordersTableWrap" class="table-wrap"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Tabela de preços</h2>
+          <p>Edite os valores-base das peças jurídicas.</p>
+        </div>
+      </div>
+      <div id="piecesTableWrap" class="table-wrap"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Configurações de preço</h2>
+          <p>Multiplicadores automáticos aplicados no cálculo final.</p>
+        </div>
+      </div>
+      <form id="settingsForm" class="form-grid admin-settings"></form>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

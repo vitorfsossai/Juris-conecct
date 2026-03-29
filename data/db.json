@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "id": "admin-1",
+      "name": "Administrador",
+      "email": "admin@jurisconnect.com",
+      "password": "123456",
+      "role": "admin"
+    }
+  ],
+  "priceSettings": {
+    "platformFeePercent": 15,
+    "urgent24hPercent": 40,
+    "urgent12hPercent": 70,
+    "hearingPercent": 25,
+    "weekendPercent": 20
+  },
+  "pieces": [
+    {"id":"civil_peticao_inicial","area":"Civil","name":"Petição inicial","basePrice":180},
+    {"id":"civil_contestacao","area":"Civil","name":"Contestação","basePrice":160},
+    {"id":"civil_recurso_apelacao","area":"Civil","name":"Apelação","basePrice":320},
+    {"id":"familia_divorcio","area":"Família e Sucessões","name":"Petição de divórcio","basePrice":220},
+    {"id":"familia_alimentos","area":"Família e Sucessões","name":"Ação de alimentos","basePrice":190},
+    {"id":"trabalhista_inicial","area":"Trabalhista","name":"Reclamação trabalhista","basePrice":220},
+    {"id":"trabalhista_contestacao","area":"Trabalhista","name":"Contestação trabalhista","basePrice":200},
+    {"id":"previdenciario_inicial","area":"Previdenciário","name":"Petição inicial previdenciária","basePrice":210},
+    {"id":"previdenciario_recurso_adm","area":"Previdenciário","name":"Recurso administrativo previdenciário","basePrice":150},
+    {"id":"consumidor_inicial","area":"Consumidor","name":"Ação de consumo","basePrice":180},
+    {"id":"consumidor_repeticao","area":"Consumidor","name":"Repetição de indébito","basePrice":170},
+    {"id":"tributario_ms","area":"Tributário","name":"Mandado de segurança tributário","basePrice":420},
+    {"id":"tributario_execucao","area":"Tributário","name":"Defesa em execução fiscal","basePrice":380},
+    {"id":"administrativo_ms","area":"Administrativo","name":"Mandado de segurança administrativo","basePrice":350},
+    {"id":"administrativo_licitacao","area":"Administrativo","name":"Impugnação/Recurso em licitação","basePrice":280},
+    {"id":"penal_resposta","area":"Penal","name":"Resposta à acusação","basePrice":280},
+    {"id":"penal_hc","area":"Penal","name":"Habeas corpus","basePrice":450},
+    {"id":"imobiliario_usucapiao","area":"Imobiliário","name":"Petição de usucapião","basePrice":480},
+    {"id":"empresarial_parecer","area":"Empresarial","name":"Parecer jurídico empresarial","basePrice":350},
+    {"id":"digital_lgpd","area":"Digital e LGPD","name":"Adequação/LGPD - peça ou parecer","basePrice":390}
+  ],
+  "orders": [],
+  "notifications": []
+}
