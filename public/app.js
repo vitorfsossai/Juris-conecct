@@ -1,264 +1,176 @@
-const state = {
-  pieces: [],
-  settings: {},
-  config: {},
-  walletBrickController: null
-};
+document.addEventListener('DOMContentLoaded', function () {
+  const authModal = document.getElementById('authModal');
+  const solicitacaoModal = document.getElementById('solicitacaoModal');
+  const closeAuthModal = document.getElementById('closeAuthModal');
+  const closeSolicitacaoModal = document.getElementById('closeSolicitacaoModal');
+  const loginForm = document.getElementById('loginForm');
+  const cadastroForm = document.getElementById('cadastroForm');
+  const solicitacaoForm = document.getElementById('solicitacaoForm');
+  const tabButtons = document.querySelectorAll('.modal-tab');
+  const btnLogin = document.getElementById('btnLogin');
+  const btnCadastro = document.getElementById('btnCadastro');
+  const btnHeroCadastro = document.getElementById('btnHeroCadastro');
+  const areaCards = document.querySelectorAll('.area-card');
+  const solArea = document.getElementById('solArea');
+  const solPeca = document.getElementById('solPeca');
+  const solUrgencia = document.getElementById('solUrgencia');
+  const previewValor = document.getElementById('previewValor');
+  const resultadoPedido = document.getElementById('resultadoPedido');
 
-function currency(value) {
-  return Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
+  let pricing = null;
 
-async function fetchJson(url, options = {}) {
-  const response = await fetch(url, {
-    headers: { 'Content-Type': 'application/json' },
-    ...options
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.message || 'Erro na requisição.');
-  }
-  return data;
-}
-
-function openModal() {
-  document.getElementById('authModal').classList.remove('hidden');
-}
-
-function closeModal() {
-  document.getElementById('authModal').classList.add('hidden');
-}
-
-function setAuthTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((button) => {
-    button.classList.toggle('active', button.dataset.tab === tab);
-  });
-  document.getElementById('loginForm').classList.toggle('hidden', tab !== 'login');
-  document.getElementById('registerForm').classList.toggle('hidden', tab !== 'register');
-}
-
-function getSelectedPiece() {
-  const pieceId = document.getElementById('pieceId').value;
-  return state.pieces.find((piece) => piece.id === pieceId);
-}
-
-function calculateEstimate() {
-  const piece = getSelectedPiece();
-  if (!piece) {
-    document.getElementById('estimateValue').textContent = currency(0);
-    return;
+  function openModal(modal) {
+    modal.classList.add('show');
   }
 
-  const settings = state.settings;
-  const urgency = document.getElementById('urgency').value;
-  const hearingSupport = document.getElementById('hearingSupport').checked;
-  const weekendDelivery = document.getElementById('weekendDelivery').checked;
-
-  let subtotal = Number(piece.basePrice);
-  if (urgency === '24h') subtotal += piece.basePrice * (Number(settings.urgent24hPercent || 0) / 100);
-  if (urgency === '12h') subtotal += piece.basePrice * (Number(settings.urgent12hPercent || 0) / 100);
-  if (hearingSupport) subtotal += piece.basePrice * (Number(settings.hearingPercent || 0) / 100);
-  if (weekendDelivery) subtotal += piece.basePrice * (Number(settings.weekendPercent || 0) / 100);
-
-  const total = subtotal + (subtotal * (Number(settings.platformFeePercent || 0) / 100));
-  document.getElementById('estimateValue').textContent = currency(total);
-}
-
-function renderPieces() {
-  const grid = document.getElementById('piecesGrid');
-  const select = document.getElementById('pieceId');
-  grid.innerHTML = '';
-  select.innerHTML = '<option value="">Selecione uma peça</option>';
-
-  state.pieces.forEach((piece) => {
-    const article = document.createElement('article');
-    article.className = 'piece-card';
-    article.innerHTML = `
-      <span class="tag">${piece.area}</span>
-      <h3>${piece.name}</h3>
-      <p>Valor-base: <strong>${currency(piece.basePrice)}</strong></p>
-      <button class="btn btn-outline small">Selecionar</button>
-    `;
-    article.querySelector('button').addEventListener('click', () => {
-      select.value = piece.id;
-      calculateEstimate();
-      document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    grid.appendChild(article);
-
-    const option = document.createElement('option');
-    option.value = piece.id;
-    option.textContent = `${piece.area} — ${piece.name} (${currency(piece.basePrice)})`;
-    select.appendChild(option);
-  });
-}
-
-function renderOrderSummary(order) {
-  const container = document.getElementById('orderSummary');
-  container.innerHTML = `
-    <div class="summary-item"><span>Pedido</span><strong>${order.id}</strong></div>
-    <div class="summary-item"><span>Área</span><strong>${order.area}</strong></div>
-    <div class="summary-item"><span>Peça</span><strong>${order.pieceName}</strong></div>
-    <div class="summary-item"><span>Prazo</span><strong>${order.deadline || 'Não informado'}</strong></div>
-    <div class="summary-item"><span>Base</span><strong>${currency(order.pricing.basePrice)}</strong></div>
-    <div class="summary-item"><span>Subtotal</span><strong>${currency(order.pricing.subtotal)}</strong></div>
-    <div class="summary-item"><span>Taxa da plataforma</span><strong>${currency(order.pricing.platformFee)}</strong></div>
-    <div class="summary-item accent"><span>Total</span><strong>${currency(order.pricing.total)}</strong></div>
-  `;
-}
-
-async function renderMercadoPagoWallet(order) {
-  const feedback = document.getElementById('paymentFeedback');
-  const walletContainer = document.getElementById('walletBrick_container');
-  const externalLink = document.getElementById('externalPaymentLink');
-  const whatsappLink = document.getElementById('whatsappLink');
-
-  feedback.classList.remove('hidden');
-  feedback.textContent = '';
-  walletContainer.innerHTML = '';
-  externalLink.classList.add('hidden');
-  whatsappLink.classList.remove('hidden');
-  whatsappLink.href = order.whatsappUrl;
-
-  if (!order.payment || !order.payment.enabled) {
-    feedback.textContent = 'Checkout Mercado Pago não configurado neste ambiente. Configure as credenciais no arquivo .env e reinicie o servidor.';
-    return;
+  function closeModal(modal) {
+    modal.classList.remove('show');
   }
 
-  externalLink.classList.remove('hidden');
-  externalLink.href = order.payment.initPoint;
-  feedback.textContent = 'Pedido criado com sucesso. Você pode pagar pelo botão seguro abaixo ou pelo link externo.';
-
-  if (!window.MercadoPago || !order.payment.publicKey || !order.payment.preferenceId) {
-    return;
+  function switchTab(tab) {
+    tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+    loginForm.style.display = tab === 'login' ? 'block' : 'none';
+    cadastroForm.style.display = tab === 'cadastro' ? 'block' : 'none';
   }
 
-  try {
-    const mp = new window.MercadoPago(order.payment.publicKey, { locale: 'pt-BR' });
-    const bricksBuilder = mp.bricks();
-    await bricksBuilder.create('wallet', 'walletBrick_container', {
-      initialization: {
-        preferenceId: order.payment.preferenceId
-      },
-      customization: {
-        texts: {
-          valueProp: 'smart_option'
-        }
-      }
-    });
-  } catch (error) {
-    feedback.textContent = 'Não foi possível renderizar o checkout embutido. Utilize o link externo seguro.';
+  btnLogin?.addEventListener('click', () => { switchTab('login'); openModal(authModal); });
+  btnCadastro?.addEventListener('click', () => { switchTab('cadastro'); openModal(authModal); });
+  btnHeroCadastro?.addEventListener('click', () => { switchTab('cadastro'); openModal(authModal); });
+  closeAuthModal?.addEventListener('click', () => closeModal(authModal));
+  closeSolicitacaoModal?.addEventListener('click', () => closeModal(solicitacaoModal));
+
+  authModal?.addEventListener('click', (e) => { if (e.target === authModal) closeModal(authModal); });
+  solicitacaoModal?.addEventListener('click', (e) => { if (e.target === solicitacaoModal) closeModal(solicitacaoModal); });
+  tabButtons.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+
+  async function loadPricing() {
+    const response = await fetch('/api/pricing');
+    pricing = await response.json();
   }
-}
 
-async function initialize() {
-  const [piecesData, configData] = await Promise.all([
-    fetchJson('/api/pieces'),
-    fetchJson('/api/config')
-  ]);
+  function fillPecas(area) {
+    if (!pricing) return;
+    const pecas = pricing.pecas.filter(item => item.ativo && item.area === area);
+    solPeca.innerHTML = '<option value="">Selecione</option>' + pecas.map(item => `<option value="${item.id}">${item.nome} — R$ ${Number(item.valorBase).toFixed(2)}</option>`).join('');
+  }
 
-  state.pieces = piecesData.pieces;
-  state.settings = piecesData.settings;
-  state.config = configData;
-
-  renderPieces();
-  calculateEstimate();
-}
-
-function bindEvents() {
-  document.getElementById('openAuthBtn').addEventListener('click', openModal);
-  document.getElementById('openRegisterBtn').addEventListener('click', () => {
-    openModal();
-    setAuthTab('register');
-  });
-  document.getElementById('closeAuthBtn').addEventListener('click', closeModal);
-  document.querySelectorAll('.tab-btn').forEach((button) => {
-    button.addEventListener('click', () => setAuthTab(button.dataset.tab));
-  });
-  document.getElementById('authModal').addEventListener('click', (event) => {
-    if (event.target.id === 'authModal') {
-      closeModal();
+  async function updatePreview() {
+    if (!solPeca.value) {
+      previewValor.textContent = 'Selecione a peça e a urgência para visualizar o valor automático.';
+      return;
     }
-  });
-
-  ['pieceId', 'urgency', 'hearingSupport', 'weekendDelivery'].forEach((id) => {
-    document.getElementById(id).addEventListener('change', calculateEstimate);
-  });
-
-  document.getElementById('loginForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const message = document.getElementById('authMessage');
-    try {
-      const result = await fetchJson('/api/login', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: document.getElementById('loginEmail').value,
-          password: document.getElementById('loginPassword').value
-        })
-      });
-      message.classList.remove('hidden');
-      message.textContent = result.message;
-      window.location.href = result.redirectTo;
-    } catch (error) {
-      message.classList.remove('hidden');
-      message.textContent = error.message;
-    }
-  });
-
-  document.getElementById('registerForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const result = await fetchJson('/api/register-interest', {
+    const response = await fetch('/api/solicitacoes/calcular', {
       method: 'POST',
-      body: JSON.stringify({
-        name: document.getElementById('registerName').value,
-        oab: document.getElementById('registerOab').value,
-        email: document.getElementById('registerEmail').value,
-        phone: document.getElementById('registerPhone').value,
-        specialty: document.getElementById('registerSpecialty').value
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pecaId: solPeca.value, urgencia: solUrgencia.value })
     });
-    window.open(result.whatsappUrl, '_blank');
-  });
-
-  document.getElementById('orderForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const submitButton = event.submitter;
-    submitButton.disabled = true;
-    submitButton.textContent = 'Gerando pedido...';
-
-    try {
-      const payload = {
-        customerName: document.getElementById('customerName').value,
-        customerEmail: document.getElementById('customerEmail').value,
-        customerPhone: document.getElementById('customerPhone').value,
-        pieceId: document.getElementById('pieceId').value,
-        urgency: document.getElementById('urgency').value,
-        deadline: document.getElementById('deadline').value,
-        description: document.getElementById('description').value,
-        hearingSupport: document.getElementById('hearingSupport').checked,
-        weekendDelivery: document.getElementById('weekendDelivery').checked
-      };
-
-      const result = await fetchJson('/api/orders', {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-
-      document.getElementById('paymentSection').classList.remove('hidden');
-      renderOrderSummary(result.order);
-      await renderMercadoPagoWallet(result.order);
-      document.getElementById('paymentSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } catch (error) {
-      alert(error.message);
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = 'Gerar pedido e pagamento';
+    const data = await response.json();
+    if (!response.ok) {
+      previewValor.textContent = data.message || 'Não foi possível calcular o valor.';
+      return;
     }
-  });
-}
+    previewValor.innerHTML = `
+      <strong>Valor final: R$ ${Number(data.composicao.total).toFixed(2)}</strong><br>
+      Base: R$ ${Number(data.composicao.valorBase).toFixed(2)}<br>
+      Urgência: ${data.composicao.percentualUrgencia}%<br>
+      Taxa da plataforma: ${data.composicao.percentualTaxaPlataforma}%
+    `;
+  }
 
-bindEvents();
-initialize().catch((error) => {
-  alert(error.message || 'Erro ao iniciar a aplicação.');
+  areaCards.forEach(card => {
+    card.addEventListener('click', async () => {
+      if (!pricing) await loadPricing();
+      const area = card.dataset.area;
+      solArea.value = area;
+      fillPecas(area);
+      resultadoPedido.style.display = 'none';
+      resultadoPedido.innerHTML = '';
+      solicitacaoForm.reset();
+      solArea.value = area;
+      previewValor.textContent = 'Selecione a peça e a urgência para visualizar o valor automático.';
+      openModal(solicitacaoModal);
+    });
+  });
+
+  solPeca?.addEventListener('change', updatePreview);
+  solUrgencia?.addEventListener('change', updatePreview);
+
+  loginForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const senha = document.getElementById('loginSenha').value.trim();
+
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, senha })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.message || 'Erro ao fazer login.');
+      return;
+    }
+    alert(data.message);
+    window.location.href = data.redirectUrl || '/admin.html';
+  });
+
+  cadastroForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const nome = document.getElementById('cadastroNome').value.trim();
+    const email = document.getElementById('cadastroEmail').value.trim();
+    const oab = document.getElementById('cadastroOab').value.trim();
+    const senha = document.getElementById('cadastroSenha').value.trim();
+
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nome, email, oab, senha })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.message || 'Erro ao cadastrar usuário.');
+      return;
+    }
+    alert(data.message);
+    cadastroForm.reset();
+    switchTab('login');
+  });
+
+  solicitacaoForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const payload = {
+      nome: document.getElementById('solNome').value.trim(),
+      email: document.getElementById('solEmail').value.trim(),
+      whatsapp: document.getElementById('solWhatsapp').value.trim(),
+      area: document.getElementById('solArea').value.trim(),
+      pecaId: document.getElementById('solPeca').value,
+      urgencia: document.getElementById('solUrgencia').value,
+      descricao: document.getElementById('solDescricao').value.trim()
+    };
+
+    const response = await fetch('/api/solicitacoes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      alert(data.message || 'Erro ao gerar pedido.');
+      return;
+    }
+
+    resultadoPedido.style.display = 'block';
+    resultadoPedido.innerHTML = `
+      <div class="notice-success">Pedido gerado com sucesso.</div>
+      <p><strong>Protocolo:</strong> ${data.pedido.protocolo}</p>
+      <p><strong>Valor:</strong> R$ ${Number(data.pedido.valor).toFixed(2)}</p>
+      <p><strong>Status:</strong> ${data.pedido.status}</p>
+      <p><strong>Checkout demo:</strong> ${data.pedido.pagamento.checkoutUrl}</p>
+      <p class="muted">Nesta versão corrigida, o pedido é criado no backend. Depois, o checkout real pode ser conectado ao Mercado Pago ou outro gateway.</p>
+    `;
+  });
+
+  loadPricing().catch(() => {
+    previewValor.textContent = 'Não foi possível carregar a tabela de preços.';
+  });
 });

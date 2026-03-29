@@ -1,67 +1,106 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JurisConnect | Painel do administrador</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Administrativo | JurisConnect</title>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div>
-      <div class="brand">JurisConnect Admin</div>
-      <div class="brand-subtitle">Gestão de pedidos, preços e fluxo financeiro</div>
-    </div>
-    <div class="header-actions">
-      <a href="index.html" class="btn btn-outline">Voltar ao site</a>
+  <header class="header">
+    <div class="nav">
+      <div class="brand">JurisConnect • Admin</div>
+      <div class="nav-actions">
+        <a class="btn btn-secondary" href="/">Site público</a>
+      </div>
     </div>
   </header>
 
-  <main class="admin-layout">
-    <section class="card">
-      <div class="section-head">
-        <div>
-          <h2>Visão geral</h2>
-          <p>Indicadores consolidados da operação.</p>
-        </div>
-      </div>
-      <div id="metricsGrid" class="summary-grid four-cols"></div>
+  <main class="container">
+    <section>
+      <h1>Painel administrativo</h1>
+      <p class="muted">Visualize solicitações, usuários e edite a precificação da plataforma.</p>
     </section>
 
-    <section class="card">
-      <div class="section-head">
-        <div>
-          <h2>Solicitações</h2>
-          <p>Atualize status, pagamento e anotações administrativas.</p>
+    <section class="stat-grid" id="stats"></section>
+
+    <section>
+      <h2 class="section-title">Tabela de preços</h2>
+      <div class="card">
+        <div class="grid">
+          <div>
+            <label for="taxaPlataforma">Taxa da plataforma (%)</label>
+            <input type="number" id="taxaPlataforma" step="0.01">
+          </div>
+          <div>
+            <label for="urgNormal">Urgência normal (%)</label>
+            <input type="number" id="urgNormal" step="0.01">
+          </div>
+          <div>
+            <label for="urg48">Urgência 48h (%)</label>
+            <input type="number" id="urg48" step="0.01">
+          </div>
+          <div>
+            <label for="urg24">Urgência 24h (%)</label>
+            <input type="number" id="urg24" step="0.01">
+          </div>
+          <div>
+            <label for="urg12">Urgência 12h (%)</label>
+            <input type="number" id="urg12" step="0.01">
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:20px;">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Área</th><th>Peça</th><th>Valor base (R$)</th><th>Ativo</th></tr>
+            </thead>
+            <tbody id="pricingBody"></tbody>
+          </table>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn btn-primary" id="salvarPricing">Salvar preços</button>
         </div>
       </div>
-      <div id="ordersTableWrap" class="table-wrap"></div>
     </section>
 
-    <section class="card">
-      <div class="section-head">
-        <div>
-          <h2>Tabela de preços</h2>
-          <p>Edite os valores-base das peças jurídicas.</p>
-        </div>
+    <section>
+      <h2 class="section-title">Solicitações</h2>
+      <div class="card table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Protocolo</th>
+              <th>Solicitante</th>
+              <th>Área</th>
+              <th>Peça</th>
+              <th>Urgência</th>
+              <th>Valor</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="solicitacoesBody"></tbody>
+        </table>
       </div>
-      <div id="piecesTableWrap" class="table-wrap"></div>
     </section>
 
-    <section class="card">
-      <div class="section-head">
-        <div>
-          <h2>Configurações de preço</h2>
-          <p>Multiplicadores automáticos aplicados no cálculo final.</p>
-        </div>
+    <section>
+      <h2 class="section-title">Usuários cadastrados</h2>
+      <div class="card table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>OAB</th>
+              <th>Perfil</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody"></tbody>
+        </table>
       </div>
-      <form id="settingsForm" class="form-grid admin-settings"></form>
     </section>
   </main>
 
-  <script src="admin.js"></script>
+  <script src="/admin.js"></script>
 </body>
 </html>
