@@ -8,6 +8,27 @@
       "senha": "123456",
       "role": "admin",
       "createdAt": "2026-03-29T00:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "nome": "Advogado Delegado Teste",
+      "email": "advogado@jurisconnect.com",
+      "oab": "RO 12345",
+      "senha": "123456",
+      "role": "advogado",
+      "createdAt": "2026-03-29T00:00:00.000Z",
+      "perfilDelegado": {
+        "telefone": "",
+        "pix": "",
+        "banco": "",
+        "agencia": "",
+        "conta": "",
+        "tipoConta": "corrente",
+        "areasInteresse": ["Cível", "Consumidor"],
+        "bio": "",
+        "oabValidada": false,
+        "ultimoPedidoSuporte": null
+      }
     }
   ],
   "pricing": {
@@ -27,5 +48,49 @@
       { "id": 6, "area": "Consumidor", "nome": "Petição Inicial", "valorBase": 170, "ativo": true }
     ]
   },
-  "solicitacoes": []
+  "solicitacoes": [
+    {
+      "id": 1001,
+      "protocolo": "JUR-1001",
+      "nome": "Camila Andrade",
+      "email": "camila@exemplo.com",
+      "whatsapp": "69999990001",
+      "area": "Cível",
+      "urgencia": "48h",
+      "descricao": "Ação de obrigação de fazer com pedido liminar para fornecimento de medicamento.",
+      "pecaId": 1,
+      "tipoPeca": "Petição Inicial",
+      "valor": 238.05,
+      "composicao": { "valorBase": 180, "percentualUrgencia": 15, "adicionalUrgencia": 27, "percentualTaxaPlataforma": 15, "taxaPlataforma": 31.05, "total": 238.05 },
+      "status": "disponivel_delegado",
+      "timelineStatus": "disponivel",
+      "pagamento": { "status": "aprovado", "provider": "externo-demo", "checkoutUrl": "/checkout.html?pedido=1001" },
+      "createdAt": "2026-03-29T08:00:00.000Z",
+      "detalhesFatos": "Paciente hipossuficiente. Documentos médicos e negativa administrativa disponíveis. Prazo curto por risco de agravamento.",
+      "delegadoId": null,
+      "aceiteAt": null
+    },
+    {
+      "id": 1002,
+      "protocolo": "JUR-1002",
+      "nome": "Rafael Gomes",
+      "email": "rafael@exemplo.com",
+      "whatsapp": "69999990002",
+      "area": "Consumidor",
+      "urgencia": "24h",
+      "descricao": "Petição inicial por cobrança indevida em cartão e negativação indevida.",
+      "pecaId": 6,
+      "tipoPeca": "Petição Inicial",
+      "valor": 254.15,
+      "composicao": { "valorBase": 170, "percentualUrgencia": 30, "adicionalUrgencia": 51, "percentualTaxaPlataforma": 15, "taxaPlataforma": 33.15, "total": 254.15 },
+      "status": "disponivel_delegado",
+      "timelineStatus": "disponivel",
+      "pagamento": { "status": "aprovado", "provider": "externo-demo", "checkoutUrl": "/checkout.html?pedido=1002" },
+      "createdAt": "2026-03-28T14:00:00.000Z",
+      "detalhesFatos": "Cliente foi negativado após cobrança de serviço não contratado. Documentos essenciais já reunidos.",
+      "delegadoId": null,
+      "aceiteAt": null
+    }
+  ],
+  "suporte": []
 }

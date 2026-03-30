@@ -3,23 +3,155 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel do Advogado | JurisConnect</title>
+  <title>Painel do Advogado Delegado | JurisConnect</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <header class="header">
     <div class="nav">
-      <div class="brand">JurisConnect • Advogado</div>
+      <div class="brand">JurisConnect • Painel do Advogado Delegado</div>
       <div class="nav-actions">
-        <a class="btn btn-secondary" href="/">Voltar ao site</a>
+        <a class="btn btn-secondary" href="/">Site público</a>
+        <button class="btn btn-primary" id="btnAtualizarPainel">Atualizar painel</button>
       </div>
     </div>
   </header>
+
   <main class="container">
-    <div class="card">
-      <h1>Painel do advogado</h1>
-      <p class="muted">Página provisória para usuários cadastrados como advogados. Na próxima fase, aqui podem entrar aceite de demandas, histórico e envio de peças.</p>
-    </div>
+    <section class="hero compact-hero">
+      <span class="badge">Dashboard do delegado</span>
+      <h1 id="delegadoNome">Bem-vindo ao seu painel</h1>
+      <p id="delegadoResumo">Acompanhe oportunidades, ganhos, prazos e mantenha seu cadastro profissional atualizado.</p>
+      <div class="inline-actions hero-actions">
+        <a href="#timelineOportunidades" class="btn btn-primary">Ver oportunidades</a>
+        <a href="#perfilDelegado" class="btn btn-secondary dark-outline">Atualizar cadastro</a>
+      </div>
+    </section>
+
+    <section class="stat-grid" id="statsDelegado"></section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">Linha do tempo de oportunidades</h2>
+          <p class="muted">Os dados de contato só aparecem após o aceite da demanda.</p>
+        </div>
+      </div>
+      <div id="timelineOportunidades" class="timeline"></div>
+    </section>
+
+    <section class="two-col-layout">
+      <div>
+        <h2 class="section-title">Demandas aceitas por você</h2>
+        <div class="card table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Protocolo</th>
+                <th>Área</th>
+                <th>Peça</th>
+                <th>Urgência</th>
+                <th>Valor</th>
+                <th>Contato liberado</th>
+              </tr>
+            </thead>
+            <tbody id="minhasDemandasBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="section-title">Meu cadastro profissional</h2>
+        <div class="card" id="perfilDelegado">
+          <form id="perfilForm">
+            <div class="grid">
+              <div class="form-group">
+                <label for="perfilNome">Nome</label>
+                <input id="perfilNome" type="text" required>
+              </div>
+              <div class="form-group">
+                <label for="perfilOab">OAB</label>
+                <input id="perfilOab" type="text" required>
+              </div>
+              <div class="form-group">
+                <label for="perfilTelefone">Telefone</label>
+                <input id="perfilTelefone" type="text" placeholder="(69) 99999-9999">
+              </div>
+              <div class="form-group">
+                <label for="perfilPix">Chave Pix</label>
+                <input id="perfilPix" type="text" placeholder="CPF, e-mail, telefone ou aleatória">
+              </div>
+              <div class="form-group">
+                <label for="perfilBanco">Banco</label>
+                <input id="perfilBanco" type="text">
+              </div>
+              <div class="form-group">
+                <label for="perfilAgencia">Agência</label>
+                <input id="perfilAgencia" type="text">
+              </div>
+              <div class="form-group">
+                <label for="perfilConta">Conta</label>
+                <input id="perfilConta" type="text">
+              </div>
+              <div class="form-group">
+                <label for="perfilTipoConta">Tipo de conta</label>
+                <select id="perfilTipoConta">
+                  <option value="corrente">Corrente</option>
+                  <option value="poupanca">Poupança</option>
+                  <option value="pagamento">Pagamento</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="perfilAreas">Áreas de interesse</label>
+              <input id="perfilAreas" type="text" placeholder="Ex.: Cível, Consumidor, Previdenciário">
+            </div>
+            <div class="form-group">
+              <label for="perfilBio">Breve apresentação</label>
+              <textarea id="perfilBio" placeholder="Informe sua experiência, rotinas que domina, disponibilidade etc."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar cadastro</button>
+            <div class="feedback-inline" id="perfilFeedback"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="two-col-layout gap-large">
+      <div>
+        <h2 class="section-title">Pedido de suporte</h2>
+        <div class="card">
+          <form id="suporteForm">
+            <div class="form-group">
+              <label for="suporteAssunto">Assunto</label>
+              <input id="suporteAssunto" type="text" placeholder="Ex.: dúvida sobre distribuição, prazo, pagamento">
+            </div>
+            <div class="form-group">
+              <label for="suporteMensagem">Mensagem</label>
+              <textarea id="suporteMensagem" placeholder="Descreva a situação com o máximo de clareza."></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark">Enviar pedido de suporte</button>
+            <div class="feedback-inline" id="suporteFeedback"></div>
+          </form>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="section-title">Validação da OAB</h2>
+        <div class="card validation-box">
+          <span class="badge" id="statusOabBadge">Validação pendente</span>
+          <p class="muted">Envie a cópia da OAB ou documento equivalente. O botão abaixo é apenas ilustrativo nesta etapa e pode ser integrado depois.</p>
+          <div class="upload-placeholder">
+            <div class="upload-icon">📄</div>
+            <p>Arraste um arquivo aqui ou clique no botão abaixo.</p>
+            <button type="button" class="btn btn-secondary dark-outline">Enviar cópia da OAB</button>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <script src="/painel-advogado.js"></script>
 </body>
 </html>

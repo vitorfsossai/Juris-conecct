@@ -48,12 +48,12 @@
     <section>
       <h2 class="section-title">Áreas Jurídicas Disponíveis</h2>
       <div class="grid">
-        <a class="card area-card card-link" href="/orcamento.html?area=C%C3%ADvel"><h3>Cível</h3><p class="muted">Petições iniciais, contestações, recursos e manifestações.</p></a>
-        <a class="card area-card card-link" href="/orcamento.html?area=Trabalhista"><h3>Trabalhista</h3><p class="muted">Reclamatórias, defesas, cálculos e recursos.</p></a>
-        <a class="card area-card card-link" href="/orcamento.html?area=Previdenci%C3%A1rio"><h3>Previdenciário</h3><p class="muted">Requerimentos, recursos e ações judiciais.</p></a>
-        <a class="card area-card card-link" href="/orcamento.html?area=Penal"><h3>Penal</h3><p class="muted">Resposta à acusação, memoriais e pedidos diversos.</p></a>
-        <a class="card area-card card-link" href="/orcamento.html?area=Consumidor"><h3>Consumidor</h3><p class="muted">Ações indenizatórias, impugnações e recursos.</p></a>
-        <a class="card area-card card-link" href="/orcamento.html?area=Tribut%C3%A1rio"><h3>Tributário</h3><p class="muted">Mandados, ações anulatórias e manifestações.</p></a>
+        <div class="card area-card" data-area="Cível"><h3>Cível</h3><p class="muted">Petições iniciais, contestações, recursos e manifestações.</p></div>
+        <div class="card area-card" data-area="Trabalhista"><h3>Trabalhista</h3><p class="muted">Reclamatórias, defesas, cálculos e recursos.</p></div>
+        <div class="card area-card" data-area="Previdenciário"><h3>Previdenciário</h3><p class="muted">Requerimentos, recursos e ações judiciais.</p></div>
+        <div class="card area-card" data-area="Penal"><h3>Penal</h3><p class="muted">Resposta à acusação, memoriais e pedidos diversos.</p></div>
+        <div class="card area-card" data-area="Consumidor"><h3>Consumidor</h3><p class="muted">Ações indenizatórias, impugnações e recursos.</p></div>
+        <div class="card area-card" data-area="Tributário"><h3>Tributário</h3><p class="muted">Mandados, ações anulatórias e manifestações.</p></div>
       </div>
     </section>
 
@@ -61,7 +61,7 @@
       <h2 class="section-title">Como funciona</h2>
       <div class="grid">
         <div class="card"><span class="badge">1</span><h3>Cadastre-se</h3><p class="muted">Crie sua conta de advogado solicitante ou delegado.</p></div>
-        <div class="card"><span class="badge">2</span><h3>Solicite a peça</h3><p class="muted">Escolha a área e avance para a página de orçamento.</p></div>
+        <div class="card"><span class="badge">2</span><h3>Solicite a peça</h3><p class="muted">Escolha a área, o tipo de peça e a urgência.</p></div>
         <div class="card"><span class="badge">3</span><h3>Veja o valor</h3><p class="muted">O sistema calcula automaticamente com base no painel admin.</p></div>
         <div class="card"><span class="badge">4</span><h3>Finalize o fluxo</h3><p class="muted">Na próxima fase, integre checkout real e distribuição automática.</p></div>
       </div>
@@ -107,6 +107,54 @@
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar</button>
       </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="solicitacaoModal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeSolicitacaoModal">&times;</span>
+      <h2>Nova solicitação</h2>
+      <form id="solicitacaoForm">
+        <div class="form-group">
+          <label for="solNome">Seu nome</label>
+          <input type="text" id="solNome" required>
+        </div>
+        <div class="form-group">
+          <label for="solEmail">Seu e-mail</label>
+          <input type="email" id="solEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="solWhatsapp">WhatsApp</label>
+          <input type="text" id="solWhatsapp" required>
+        </div>
+        <div class="form-group">
+          <label for="solArea">Área</label>
+          <input type="text" id="solArea" required readonly>
+        </div>
+        <div class="form-group">
+          <label for="solPeca">Tipo de peça</label>
+          <select id="solPeca" required></select>
+        </div>
+        <div class="form-group">
+          <label for="solUrgencia">Urgência</label>
+          <select id="solUrgencia">
+            <option value="normal">Normal</option>
+            <option value="48h">48 horas</option>
+            <option value="24h">24 horas</option>
+            <option value="12h">12 horas</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="solDescricao">Descrição da demanda</label>
+          <textarea id="solDescricao" required></textarea>
+        </div>
+        <div class="value-box" id="previewValor">
+          Selecione a peça e a urgência para visualizar o valor automático.
+        </div>
+        <button type="submit" class="btn btn-success">Gerar pedido</button>
+      </form>
+
+      <div class="info-box" id="resultadoPedido" style="display:none;"></div>
     </div>
   </div>
 
